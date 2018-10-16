@@ -20,7 +20,7 @@ app.use(express.static(__dirname + '/public'));
 app.use("/", (req, res) => {
     res.render("main");
     connection += 1;
-    Console.log("Connection n°" + connection)
+    console.log("Connection n°" + connection)
 });
 
 //listening
