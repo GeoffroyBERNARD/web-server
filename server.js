@@ -9,6 +9,9 @@ app.set('view engine', 'ejs');
 const ip = "0.0.0.0";
 const port = "80";
 
+//number of connection (TOTAL)
+let connection = 0;
+
 //defining ressources folder
 app.use(express.static(__dirname + '/public'));
 
@@ -16,6 +19,8 @@ app.use(express.static(__dirname + '/public'));
 //main view
 app.use("/", (req, res) => {
     res.render("main");
+    connection += 1;
+    Console.log("Connection n°" + connection)
 });
 
 //listening
