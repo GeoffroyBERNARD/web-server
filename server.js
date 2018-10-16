@@ -15,7 +15,7 @@ app.use(express.static(__dirname + '/public'));
 //main view
 app.use("/", (req, res) => {
     res.render("main");
-    console.log("Request from " + req.ip)
+    console.log("Request from " + req.header('x-forwarded-for')
 });
 
 //listening
