@@ -2,8 +2,14 @@
 const express = require('express')
 const app = express()
 
+
+
+
 //defining the view engine
 app.set('view engine', 'ejs');
+
+let server = require("http").Server(app);
+let io = require('socket.io').listen(server);
 
 //defining network
 const ip = "0.0.0.0";
@@ -26,4 +32,9 @@ app.use("/", (req, res) => {
 //listening
 app.listen(port, ip, function () {
   console.log('Server listening on ' + ip + ' with port ' + port)
-})
+});
+
+
+
+
+
