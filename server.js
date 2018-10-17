@@ -32,9 +32,15 @@ let io = require('socket.io').listen(server);
 
   io.sockets.on('connection', function (socket) {
 
+  	socket.nick = "Anon"
+  	socket.desc = "Short for a non mouse."
+
 	socket.on('nickname', function(nick) {
 		socket.nick = nick;
-		console.log("new entry : " + nick);
+	});
+
+	socket.on('description', function(desc) {
+		socket.desc = desc;
 	});
 
 
