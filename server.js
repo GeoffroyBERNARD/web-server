@@ -11,7 +11,7 @@ let server = require("http").Server(app);
 
 
 //defining network
-const ip = "localhost";
+const ip = "0.0.0.0";
 const port = "80";
 
 //number of connection (TOTAL)
