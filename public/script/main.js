@@ -1,11 +1,16 @@
 let socket = io.connect();
 
-socket.on('receiving', function (message) {
-	$('.chat').append(message);
+let isScrolledToBottom = true;
+
+
+socket.on('chat', function (chat) {
+	let out = document.getElementById("chat");
+	isScrolledToBottom = out.scrollHeight - out.clientHeight <= out.scrollTop + 1;
+	chat_display.values = chat;
 });
 
 $('body').on('click','.send',function(){
-	socket.emit('sending', $('#input').val());
+	socket.emit('message', $('#input').val());
 	$('#input').val("");
 });
 
@@ -14,17 +19,21 @@ $('body').on('click','.edit',function(){
 	$('.edit').html("save changes")
 	let nick = $('.nick').html()
 	let desc = $('.desc').html()
-	$('.nick').html(document.createElement('input'));
-	$('.desc').html(document.createElement('input'));
+	let input_nick = document.createElement('input');
+	let textarea_desc = document.createElement('textarea');
+	input_nick.className = "form-control"
+	textarea_desc.className = "form-control"
+	$('.nick').html(input_nick);
+	$('.desc').html(textarea_desc);
 	$('.nick input').val(nick);
-	$('.desc input').val(desc);
+	$('.desc textarea').val(desc);
 	$('.edit').removeClass('edit').addClass('save');
 });
 
 $('body').on('click','.save',function(){
 	$('.save').html("edit profile")
 	let nick = $('.nick input').val()
-	let desc = $('.desc input').val()
+	let desc = $('.desc textarea').val()
 	$('.nick').html(nick);
 	$('.desc').html(desc);
 	socket.emit('nickname', nick);
@@ -97,3 +106,40 @@ let cookie_pic = getCookie("pic");
 		socket.emit('picture', cookie_pic);
 		$('.edit-pic').attr('src', './upload/' + cookie_pic);
 	}
+
+
+
+/* Clicker */
+
+$('body').on('click','.target',function(){
+	socket.emit('click');
+});
+
+socket.on('score', function (score) {
+	score_display.value = score;
+});
+
+let score_display = new Vue({
+  el: '#score',
+  data: {
+    value: 0
+  }
+})
+
+let chat_display = new Vue({
+  el: '#chat',
+  data: {
+    values: ""
+  }
+})
+
+
+Vue.nextTick(function(){
+	console.log(isScrolledToBottom)
+	
+});
+
+$("body").on('DOMSubtreeModified', "#chat", function() {
+    if(isScrolledToBottom)
+    	$("#chat").scrollTop($("#chat")[0].scrollHeight);
+});

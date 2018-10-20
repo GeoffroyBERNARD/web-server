@@ -13,11 +13,12 @@ let server = require("http").Server(app);
 
 
 //defining network
-const ip = "0.0.0.0";
+const ip = "localhost";
 const port = "80";
 
-//number of connection (TOTAL)
 let connection = 0;
+let score = 0;
+let chat = [];
 
 //defining ressources folder
 app.use(express.static(__dirname + '/public'));
@@ -42,6 +43,9 @@ let io = require('socket.io').listen(server);
   	socket.nick = "Anon"
   	socket.desc = "Short for a non mouse."
 
+  	socket.emit("chat",chat);
+  	socket.emit('score',score); 
+
   	siofu.on("saved", function(event){
         console.log(socket.nick + " saved " + event.file.name + " as his profile pic");
         socket.pic = event.file.name
@@ -64,19 +68,31 @@ let io = require('socket.io').listen(server);
 		socket.pic = validator.escape(pic);
 	});
 
+	socket.on('click', function() {
+		score += 1;
+		io.emit('score',score); 
+	});
 
-	socket.on('sending',function(message){
+
+
+	socket.on('message',function(message){
 		message = message.split(' ')
 		message.forEach(function(word, index){
 			if(validator.isURL(word)){
 				console.log('url');
-				message[index] = "<a target='_blank 'href="+ word +">" + word +"</a>";
+				message[index] = "<a target='_blank 'href="+validator.escape(word) +">" + validator.escape(word) +"</a>";
 			}
 			else validator.escape(word)
 		});
-		message = message.join()
-		console.log(socket.nick + ": " + message)
-        io.emit('receiving',socket.nick + ": " + message+"<br>"); //envoi le message à tout le monde
+
+
+		let tmp = {};
+		tmp.sender = socket.nick
+		tmp.message = message.join()
+		message = socket.nick + ": " + message+ "<br>"
+		chat.push(tmp)
+		console.log(chat[chat.length - 1]);
+        io.emit('chat',chat); 
 	});
 });
 

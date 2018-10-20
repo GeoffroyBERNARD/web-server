@@ -1,0 +1,10 @@
+#chat{
+	height:200px;
+	overflow: auto;
+}
+
+.sender{
+	font-size:1em;
+	font-weight:bold;
+	color:#3f5270;
+}
