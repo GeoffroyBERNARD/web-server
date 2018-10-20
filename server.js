@@ -13,7 +13,7 @@ let server = require("http").Server(app);
 
 
 //defining network
-const ip = "localhost";
+const ip = "0.0.0.0";
 const port = "80";
 
 let connection = 0;
@@ -76,20 +76,11 @@ let io = require('socket.io').listen(server);
 
 
 	socket.on('message',function(message){
-		message = message.split(' ')
-		message.forEach(function(word, index){
-			if(validator.isURL(word)){
-				console.log('url');
-				message[index] = "<a target='_blank 'href="+validator.escape(word) +">" + validator.escape(word) +"</a>";
-			}
-			else validator.escape(word)
-		});
 
-
+		message = validator.escape(message)
 		let tmp = {};
 		tmp.sender = socket.nick
-		tmp.message = message.join()
-		message = socket.nick + ": " + message+ "<br>"
+		tmp.message = message
 		chat.push(tmp)
 		console.log(chat[chat.length - 1]);
         io.emit('chat',chat); 

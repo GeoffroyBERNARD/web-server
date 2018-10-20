@@ -1,5 +1,8 @@
 let socket = io.connect();
 
+window.Vue.directive('linkified', function (el, binding) {
+    linkifyElement(el, binding.value);
+});
 let isScrolledToBottom = true;
 
 

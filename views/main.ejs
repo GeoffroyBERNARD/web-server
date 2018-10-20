@@ -32,7 +32,7 @@
 
                 <div class="col-12 col-md-8 col-lg-9" > 
                     <div id="chat"  >
-                        <p v-for="value in values"><span class="sender">{{ value.sender }} :</span> {{ value.message }}</p>
+                        <p v-for="value in values"><span class="sender" data-toggle="tooltip" data-html="true" :title="value.sender">{{ value.sender }} :</span><span v-linkified> {{ value.message }}</span></p>
                     </div>
                     <div class="form-group">
                         <label for="input">enter your message</label>
@@ -56,6 +56,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
         <script src="/siofu/client.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/linkifyjs@2.1.6/dist/linkify.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/linkifyjs@2.1.6/dist/linkify-element.min.js"></script>
         <script src="/script/main.js"></script>
         
 
